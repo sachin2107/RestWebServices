@@ -13,6 +13,7 @@ import javax.xml.ws.soap.AddressingFeature.Responses;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.sachin.demorest.exception.PatientNotFoundException;
 import com.sachin.demorest.model.Patient;
 
 @Service
@@ -49,13 +50,15 @@ public class PatientServiceImpl implements PatientService{
 	@Override
 	public Response deletePatient(int id) {
 		Patient currentPatient = (Patient)patientMap.get(id);
+		Response response;
 		if(currentPatient != null)
 		{
 			patientMap.remove(id);
-			return Response.ok().build();
+			response = Response.ok().build();
 		}else {
-			return Response.status(Status.NOT_FOUND).build();
+			throw new PatientNotFoundException("Patient Not Found...");
 		}
+		return response;
 	}
 
 	@Override
